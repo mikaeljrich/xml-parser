@@ -7,8 +7,10 @@ import {
   Button,
   notification,
   Space,
+  Modal,
+  Typography,
 } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined, SmileOutlined } from '@ant-design/icons';
 import fileDownload from 'js-file-download';
 import format from '../helpers/formatter';
 
@@ -24,18 +26,10 @@ const openNotification = (
 };
 
 const MainView: React.FC = () => {
-  const [format_input, setFormatInput] = useState(
-    'P|Carl Gustaf|Bernadotte\n' +
-      'T|0768-101801|08-101801\n' +
-      'A|Drottningholms slott|Stockholm|10001\n' +
-      'F|Victoria|1977\n' +
-      'A|Haga Slott|Stockholm|10002\n' +
-      'F|Carl Philip|1979\n' +
-      'T|0768-101802|08-101802\n' +
-      'P|Barack|Obama\n' +
-      'A|1600 Pennsylvania Avenue|Washington, D.C',
-  );
+  const [format_input, setFormatInput] = useState('');
   const [format_output, setFormatOutput] = useState<string>('');
+  const [visible, setVisible] = useState(false);
+  const [filename, setFilename] = useState('test');
 
   const onFormatClick = (): void => {
     try {
@@ -53,19 +47,34 @@ const MainView: React.FC = () => {
     }
   };
 
+  const showSaveModal = () => {
+    setVisible(true);
+  };
+
   const saveToFile = () => {
     if (!format_output) {
       openNotification('error', 'Something went wrong...', 'Nothing to export');
       return;
     }
 
-    fileDownload(format_output, 'test.xml', 'application/xml');
+    setVisible(false);
+
+    filename &&
+      fileDownload(format_output, `${filename}.xml`, 'application/xml');
   };
 
   return (
     <div className="mainview">
+      <div className="header">
+        <Typography.Title className="main-title" level={1}>
+          XML Parser
+        </Typography.Title>
+      </div>
       <Row gutter={32}>
         <Col span={8} offset={4}>
+          <Typography.Title className="titles" level={2}>
+            Input:
+          </Typography.Title>
           <Card className="main-card">
             <Input.TextArea
               placeholder="Input text to format here..."
@@ -77,6 +86,9 @@ const MainView: React.FC = () => {
           </Card>
         </Col>
         <Col span={8}>
+          <Typography.Title className="titles" level={2}>
+            Output:
+          </Typography.Title>
           <Card className={'main-card'}>
             <div className="codeview">{format_output}</div>
           </Card>
@@ -88,21 +100,41 @@ const MainView: React.FC = () => {
             onClick={onFormatClick}
             disabled={!format_input}
             size="large"
-            type="primary"
+            type="danger"
+            className="pink"
           >
             Format
           </Button>
           <Button
             disabled={!format_output}
             size="large"
-            type="primary"
+            type="danger"
             icon={<DownloadOutlined />}
-            onClick={saveToFile}
+            onClick={showSaveModal}
+            className="pink"
           >
             Save to XML file
           </Button>
         </Space>
       </div>
+      <div className="footer">
+        <Typography.Text>
+          Softhouse here i come <SmileOutlined />
+        </Typography.Text>
+      </div>
+      <Modal
+        title="Name on file to save?"
+        visible={visible}
+        onOk={saveToFile}
+        onCancel={() => setVisible(false)}
+        okButtonProps={{ disabled: !filename }}
+      >
+        <Input
+          placeholder="Filename..."
+          value={filename}
+          onChange={(e) => setFilename(e.target.value)}
+        />
+      </Modal>
     </div>
   );
 };

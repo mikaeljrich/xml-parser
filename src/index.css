@@ -11,8 +11,22 @@ body, html, #root {
   padding: 32px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  background-color: aquamarine;
+  justify-content: space-evenly;
+  background-color: #2DB494;
+}
+
+.mainview .header {
+  text-align: center;
+}
+
+.main-title {
+  font-weight: bolder !important;
+  font-size: 48px !important;
+  color: #FF5F5C !important;
+}
+
+.mainview .footer {
+  text-align: center;
 }
 
 .main-card {
@@ -32,6 +46,10 @@ body, html, #root {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.titles {
+  color: #29A387 !important;
 }
 
 
