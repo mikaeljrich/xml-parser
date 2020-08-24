@@ -47,11 +47,11 @@ const MainView: React.FC = () => {
     }
   };
 
-  const showSaveModal = () => {
+  const showSaveModal = (): void => {
     setVisible(true);
   };
 
-  const saveToFile = () => {
+  const saveToFile = (): void => {
     if (!format_output) {
       openNotification('error', 'Something went wrong...', 'Nothing to export');
       return;
@@ -100,7 +100,7 @@ const MainView: React.FC = () => {
             onClick={onFormatClick}
             disabled={!format_input}
             size="large"
-            type="danger"
+            type={'danger' as any}
             className="pink"
           >
             Format
@@ -108,7 +108,7 @@ const MainView: React.FC = () => {
           <Button
             disabled={!format_output}
             size="large"
-            type="danger"
+            type={'danger' as any}
             icon={<DownloadOutlined />}
             onClick={showSaveModal}
             className="pink"
